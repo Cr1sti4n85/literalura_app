@@ -10,22 +10,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
-public class LiteraluraApplication implements CommandLineRunner {
+public class LiteraluraApplication  {
 
 	//INYECCION DE DEPENDENCIA
-	@Autowired
-	private BookRepository repository;
+//	@Autowired
+//	private BookRepository repository;
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(LiteraluraApplication.class, args);
+		ApplicationContext context = SpringApplication.run(LiteraluraApplication.class, args);
+
+		var mainService = context.getBean(Main.class);
+		mainService.muestraElMenu();
 
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		Main main = new Main(repository);
-		main.muestraElMenu();
-
-	}
 }

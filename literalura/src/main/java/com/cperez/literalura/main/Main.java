@@ -2,20 +2,24 @@ package com.cperez.literalura.main;
 
 
 import com.cperez.literalura.repositories.BookRepository;
+import com.cperez.literalura.services.BookService;
 import com.cperez.literalura.services.ConsumoAPI;
 import com.cperez.literalura.services.ConvierteDatos;
+import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
 
+@Service
 public class Main {
     private final Scanner teclado = new Scanner(System.in);
     private final ConsumoAPI consumoApi = new ConsumoAPI();
     private final String URL_BASE = "https://gutendex.com/";
     private final ConvierteDatos conversor = new ConvierteDatos();
     private BookRepository bookRepository;
+    private BookService bookService;
 
-    public Main(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public Main(BookService bs) {
+        this.bookService = bs;
     }
 
 
@@ -23,15 +27,12 @@ public class Main {
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
-                    1 - Buscar series en servifor externo
-                    2 - Buscar episodios
-                    3 - Mostrar series buscadas
-                    4 - Buscar serie en base de datos local
-                    5 - Buscar Top 5 mejores series
-                    6 - Buscar Series por Categoría
-                    7 - Buscar por número de temporadas y evaluación:
-                    8 - Buscar episodio por nombre: 
-                    9 - Top 5 episodios por serie: 
+                    1 - Buscar libro por título
+                    2 - Listar libros registrados
+                    3 - Listar autores registrados
+                    4 - Listar autores vivos en un determinado año
+                    5 - Listar libros por idioma
+                   
                     0 - Salir
                     """;
             System.out.println(menu);
@@ -40,7 +41,7 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-                    System.out.println("hola");
+                    buscarLibros();
                     break;
 
                 case 0:
@@ -51,6 +52,10 @@ public class Main {
             }
         }
 
+    }
+
+    private void buscarLibros() {
+        bookService.buscarLibro(teclado);
     }
 
 

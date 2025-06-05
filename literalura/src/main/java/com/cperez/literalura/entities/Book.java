@@ -1,5 +1,6 @@
 package com.cperez.literalura.entities;
 
+import com.cperez.literalura.dtos.JsonBookDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,16 +19,32 @@ public class Book {
     @Column(nullable = false, name = "id")
     private Long id;
 
-    @Column(nullable = false, name = "title")
+    @Column( name = "title", columnDefinition = "TEXT")
     private String title;
 
-    @Column(nullable = false, name = "language")
+    @Column(name = "language")
     private String language;
 
-    @Column(nullable = false, name = "download_count")
+    @Column( name = "download_count")
     private int downloadCount;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
+
+    public Book(JsonBookDTO bookDto){
+
+        this.title = bookDto.title();
+        this.downloadCount = bookDto.downloadCount();
+        this.language = bookDto.language().getFirst();
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", language='" + language + '\'' +
+                ", downloadCount=" + downloadCount +
+                '}';
+    }
 }
