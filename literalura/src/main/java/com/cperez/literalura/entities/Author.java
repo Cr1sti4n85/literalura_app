@@ -36,7 +36,7 @@ public class Author {
     private List<Book> books = new ArrayList<>();
 
     public Author(JsonAuthorDTO authorDto){
-        this.name = authorDto.name();
+        this.name = authorDto.name() != null ? authorDto.name() : "Unknown";
         this.birthYear = authorDto.birthYear();
         this.deathYear = authorDto.deathYear();
     }

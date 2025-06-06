@@ -47,6 +47,9 @@ public class Main {
                 case 4:
                     listarAutoresVivos();
                     break;
+                case 5:
+                    buscarPorIdioma();
+                    break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -56,6 +59,7 @@ public class Main {
         }
 
     }
+
 
     private void buscarLibros() {
         bookService.buscarLibro(teclado);
@@ -70,5 +74,32 @@ public class Main {
 
     private void listarAutoresVivos() {
         bookService.listarAutoresVivos(teclado);
+    }
+
+    private void buscarPorIdioma() {
+        System.out.print("""
+                Elige un idioma:
+                1- Español
+                2- Inglés
+                3- Francés
+                4- Portugués
+                """);
+        var opcion = teclado.nextLine();
+        switch (opcion){
+            case "1":
+                bookService.buscarLibrosPorIdioma("es");
+                break;
+            case "2":
+                bookService.buscarLibrosPorIdioma("en");
+                break;
+            case "3":
+                bookService.buscarLibrosPorIdioma("fr");
+                break;
+            case "4":
+                bookService.buscarLibrosPorIdioma("pt");
+                break;
+            default:
+                System.out.println("Entrada no válida");
+        }
     }
 }

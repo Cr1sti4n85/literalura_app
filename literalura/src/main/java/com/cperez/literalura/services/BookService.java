@@ -8,9 +8,7 @@ import com.cperez.literalura.repositories.BookRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -56,12 +54,22 @@ public class BookService {
     public void listarAutoresVivos(Scanner cli){
         System.out.println("Indica el año en el que el autor estaba vivo: ");
         var year = Integer.parseInt(cli.nextLine());
-        var authors = authorRepository.findByDeathYearGreaterThanAndBirthYearLessThan(year, year);
+//        var authors = authorRepository.findByDeathYearGreaterThanAndBirthYearLessThan(year, year);
+         var authors = authorRepository.findAuthorByYear(year);
         if(authors.isEmpty()){
             System.out.println("no hay autores para listar");
             return;
         }
         authors.forEach(System.out::println);
+    }
+
+    public void buscarLibrosPorIdioma(String language){
+        List<Book> books = bookRepository.findByLanguage(language);
+        if (books.isEmpty()){
+            System.out.println("No se encontraron resultados");
+            return;
+        }
+        books.forEach(System.out::println);
     }
 
     private void buscarOnline(String bookName){
