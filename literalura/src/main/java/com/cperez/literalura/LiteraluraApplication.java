@@ -12,9 +12,7 @@ import org.springframework.context.ApplicationContext;
 @SpringBootApplication
 public class LiteraluraApplication  {
 
-	//INYECCION DE DEPENDENCIA
-//	@Autowired
-//	private BookRepository repository;
+
 
 	public static void main(String[] args) {
 

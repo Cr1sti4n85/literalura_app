@@ -1,6 +1,8 @@
 package com.cperez.literalura.main;
 
 import com.cperez.literalura.services.BookService;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
@@ -9,9 +11,11 @@ import java.util.Scanner;
 public class Main {
     private final Scanner teclado = new Scanner(System.in);
     private final BookService bookService;
+    private final ApplicationContext context;
 
-    public Main(BookService bs) {
+    public Main(BookService bs, ApplicationContext context) {
         this.bookService = bs;
+        this.context = context;
     }
 
 
@@ -32,29 +36,19 @@ public class Main {
             teclado.nextLine();
 
             switch (opcion) {
-                case 1:
-                    buscarLibros();
-                    break;
+                case 1 -> buscarLibros();
 
-                case 2:
-                    listarLibros();
-                    break;
+                case 2 ->listarLibros();
 
-                case 3:
-                    listarAutores();
-                    break;
+                case 3 -> listarAutores();
 
-                case 4:
-                    listarAutoresVivos();
-                    break;
-                case 5:
-                    buscarPorIdioma();
-                    break;
-                case 0:
-                    System.out.println("Cerrando la aplicación...");
-                    break;
-                default:
-                    System.out.println("Opción inválida");
+                case 4 -> listarAutoresVivos();
+
+                case 5 -> buscarPorIdioma();
+
+                case 0 -> cerrarAplicacion();
+
+                default -> System.out.println("Opción inválida");
             }
         }
 
@@ -86,20 +80,21 @@ public class Main {
                 """);
         var opcion = teclado.nextLine();
         switch (opcion){
-            case "1":
-                bookService.buscarLibrosPorIdioma("es");
-                break;
-            case "2":
-                bookService.buscarLibrosPorIdioma("en");
-                break;
-            case "3":
-                bookService.buscarLibrosPorIdioma("fr");
-                break;
-            case "4":
-                bookService.buscarLibrosPorIdioma("pt");
-                break;
-            default:
-                System.out.println("Entrada no válida");
+            case "1" -> bookService.buscarLibrosPorIdioma("es");
+
+            case "2" -> bookService.buscarLibrosPorIdioma("en");
+
+            case "3" -> bookService.buscarLibrosPorIdioma("fr");
+
+            case "4" -> bookService.buscarLibrosPorIdioma("pt");
+
+            default -> System.out.println("Entrada no válida");
         }
+    }
+
+    private void cerrarAplicacion() {
+        System.out.println("Cerrando la aplicación...");
+        int exitCode = SpringApplication.exit(context, () -> 0);
+        System.exit(exitCode);
     }
 }
