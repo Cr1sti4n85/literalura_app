@@ -41,10 +41,10 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
-                "title='" + title + '\'' +
-                ", language='" + language + '\'' +
-                ", downloadCount=" + downloadCount +
-                '}';
+        return  "##############################" + "\n" +
+                "Titulo: " + title + "\n" +
+                "Idioma: " + language + "\n" +
+                "Cantidad de descargas: " + downloadCount + "\n" +
+                "Autor: " + author.getName() + "\n";
     }
 }

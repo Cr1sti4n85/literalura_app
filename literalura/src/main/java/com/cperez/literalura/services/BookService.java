@@ -1,6 +1,5 @@
 package com.cperez.literalura.services;
 
-import com.cperez.literalura.dtos.JsonBookDTO;
 import com.cperez.literalura.dtos.JsonResponseDTO;
 import com.cperez.literalura.entities.Author;
 import com.cperez.literalura.entities.Book;
@@ -10,10 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -24,24 +21,63 @@ public class BookService {
     private final ConvierteDatos conversor = new ConvierteDatos();
 
     public void buscarLibro(Scanner cli){
-
         System.out.print("Escribe el nombre de la serie que deseas buscar: ");
-        var nombre = cli.nextLine();
-        var json = consumoApi.obtenerDatos("https://gutendex.com/books/?search=" + nombre);
+        var bookName = cli.nextLine();
+        var foundBooks = bookRepository.findByTitleContainsIgnoreCase(bookName);
+
+        if (!foundBooks.isEmpty()){
+            foundBooks.forEach(System.out::println);
+            return;
+        }
+
+        buscarOnline(bookName);
+
+    }
+
+    public void listarTodosLosLibros(){
+        var books = bookRepository.findAll();
+        if(books.isEmpty()){
+            System.out.println("No hay libros para listar");
+            return;
+        }
+        books.forEach(System.out::println);
+    }
+
+    public void listarTodosLosAutores(){
+        var authors = authorRepository.findAll();
+        if(authors.isEmpty()){
+            System.out.println("no hay autores para listar");
+            return;
+        }
+
+        authors.forEach(System.out::println);
+    }
+
+    private void buscarOnline(String bookName){
+        var json = consumoApi
+                .obtenerDatos("https://gutendex.com/books/?search=" + bookName.replace(" ", "+"));
 
         var bookResults = conversor.obtenerDatos(json, JsonResponseDTO.class);
+
+        if(bookResults.results().isEmpty()) {
+            System.out.println("No se obtuvieron resultados");
+            return;
+        }
+        mostrarYGuardarEnBD(bookResults);
+    }
+
+    private void mostrarYGuardarEnBD(JsonResponseDTO bookResults){
         Set<String> seenTitles = new HashSet<>();
         var bookList = bookResults.results().stream()
-                        .filter(bookDto -> seenTitles.add(bookDto.title()))
-                        .toList();
+                .filter(bookDto -> seenTitles.add(bookDto.title()))
+                .toList();
 
         Set<String> seenAuthorNames = new HashSet<>();
         var authorsList = bookList.stream()
                 .flatMap(result -> result.author().stream()
                         .filter(authorDto -> seenAuthorNames.add(authorDto.name()))
-                        .map(authorDto -> new Author(authorDto)))
+                        .map(Author::new))
                 .toList();
-
 
         for (Author author : authorsList) {
             String authorName = author.getName();
@@ -52,12 +88,11 @@ public class BookService {
                     .forEach(bookDto -> {
                         var book = new Book(bookDto);
                         author.addBook(book);
+                        System.out.println(book);
                     });
 
         }
         authorsList.stream().filter(a -> !a.getBooks().isEmpty())
                 .forEach(authorRepository::save);
-
     }
-
 }

@@ -44,6 +44,13 @@ public class Main {
                     buscarLibros();
                     break;
 
+                case 2:
+                    listarLibros();
+                    break;
+
+                case 3:
+                    listarAutores();
+                    break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -58,5 +65,10 @@ public class Main {
         bookService.buscarLibro(teclado);
     }
 
-
+    private void listarLibros() {
+       bookService.listarTodosLosLibros();
+    }
+    private void listarAutores() {
+        bookService.listarTodosLosAutores();
+    }
 }

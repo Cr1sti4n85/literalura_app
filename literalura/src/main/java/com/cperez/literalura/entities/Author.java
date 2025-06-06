@@ -48,10 +48,11 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Author{" +
-                "name='" + name + '\'' +
-                ", birthYear='" + birthYear + '\'' +
-                ", deathYear='" + deathYear + '\'' +
-                '}';
+        var titleBooks = books.stream().map(Book::getTitle).toList();
+        return "#############################" + "\n" +
+                "Nombre: '" + name + "\n" +
+                "Año de nacimiento: " + birthYear + "\n" +
+                "Año de fallecimiento: " + deathYear + "\n" +
+                "Libros: " + titleBooks + "\n";
     }
 }
