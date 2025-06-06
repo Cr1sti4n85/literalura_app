@@ -1,10 +1,6 @@
 package com.cperez.literalura.main;
 
-
-import com.cperez.literalura.repositories.BookRepository;
 import com.cperez.literalura.services.BookService;
-import com.cperez.literalura.services.ConsumoAPI;
-import com.cperez.literalura.services.ConvierteDatos;
 import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
@@ -12,11 +8,7 @@ import java.util.Scanner;
 @Service
 public class Main {
     private final Scanner teclado = new Scanner(System.in);
-    private final ConsumoAPI consumoApi = new ConsumoAPI();
-    private final String URL_BASE = "https://gutendex.com/";
-    private final ConvierteDatos conversor = new ConvierteDatos();
-    private BookRepository bookRepository;
-    private BookService bookService;
+    private final BookService bookService;
 
     public Main(BookService bs) {
         this.bookService = bs;
@@ -51,6 +43,10 @@ public class Main {
                 case 3:
                     listarAutores();
                     break;
+
+                case 4:
+                    listarAutoresVivos();
+                    break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -70,5 +66,9 @@ public class Main {
     }
     private void listarAutores() {
         bookService.listarTodosLosAutores();
+    }
+
+    private void listarAutoresVivos() {
+        bookService.listarAutoresVivos(teclado);
     }
 }

@@ -27,10 +27,10 @@ public class Author {
     private String name;
 
     @Column(name = "birth_year")
-    private String birthYear;
+    private Integer birthYear;
 
     @Column(name = "death_year")
-    private String deathYear;
+    private Integer deathYear;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Book> books = new ArrayList<>();

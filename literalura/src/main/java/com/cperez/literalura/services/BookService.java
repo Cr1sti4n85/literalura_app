@@ -53,6 +53,17 @@ public class BookService {
         authors.forEach(System.out::println);
     }
 
+    public void listarAutoresVivos(Scanner cli){
+        System.out.println("Indica el año en el que el autor estaba vivo: ");
+        var year = Integer.parseInt(cli.nextLine());
+        var authors = authorRepository.findByDeathYearGreaterThanAndBirthYearLessThan(year, year);
+        if(authors.isEmpty()){
+            System.out.println("no hay autores para listar");
+            return;
+        }
+        authors.forEach(System.out::println);
+    }
+
     private void buscarOnline(String bookName){
         var json = consumoApi
                 .obtenerDatos("https://gutendex.com/books/?search=" + bookName.replace(" ", "+"));

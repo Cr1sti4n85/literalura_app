@@ -8,8 +8,8 @@ public record JsonAuthorDTO(
         @JsonAlias("name")
         String name,
         @JsonAlias("birth_year")
-        String birthYear,
+        Integer birthYear,
         @JsonAlias("death_year")
-        String deathYear
+        Integer deathYear
 ) {
 }
