@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 @Service
@@ -18,11 +19,12 @@ public class Main {
         this.context = context;
     }
 
-
     public void muestraElMenu() {
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
+                    Bienvenidos. Escoge una opción:
+                    
                     1 - Buscar libro por título
                     2 - Listar libros registrados
                     3 - Listar autores registrados
@@ -33,26 +35,38 @@ public class Main {
                     0 - Salir
                     """;
             System.out.println(menu);
-            opcion = teclado.nextInt();
-            teclado.nextLine();
+            try {
+                opcion = teclado.nextInt();
+                teclado.nextLine();
 
-            switch (opcion) {
-                case 1 -> buscarLibros();
+                switch (opcion) {
+                    case 1 -> buscarLibros();
 
-                case 2 ->listarLibros();
+                    case 2 ->listarLibros();
 
-                case 3 -> listarAutores();
+                    case 3 -> listarAutores();
 
-                case 4 -> listarAutoresVivos();
+                    case 4 -> listarAutoresVivos();
 
-                case 5 -> listarCantidadPorIdioma();
+                    case 5 -> listarCantidadPorIdioma();
 
-                case 6 -> buscarPorIdioma();
+                    case 6 -> buscarPorIdioma();
 
-                case 0 -> cerrarAplicacion();
+                    case 0 -> cerrarAplicacion();
 
-                default -> System.out.println("Opción inválida");
+                    default -> System.out.println("Opción inválida");
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada no válida");
+                teclado.nextLine();
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                teclado.nextLine();
+
             }
+
         }
 
     }
@@ -78,24 +92,11 @@ public class Main {
 
     private void buscarPorIdioma() {
         System.out.print("""
-                Elige un idioma:
-                1- Español
-                2- Inglés
-                3- Francés
-                4- Portugués
+                Elige por código de idioma
+                (Ejemplos: en (inglés), es (español), fr (francés)):
                 """);
         var opcion = teclado.nextLine();
-        switch (opcion){
-            case "1" -> bookService.buscarLibrosPorIdioma("es");
-
-            case "2" -> bookService.buscarLibrosPorIdioma("en");
-
-            case "3" -> bookService.buscarLibrosPorIdioma("fr");
-
-            case "4" -> bookService.buscarLibrosPorIdioma("pt");
-
-            default -> System.out.println("Entrada no válida");
-        }
+        bookService.buscarLibrosPorIdioma(opcion);
     }
 
     private void cerrarAplicacion() {
