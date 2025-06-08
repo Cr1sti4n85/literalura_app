@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: literalura
+  datasource:
+    url: { DB_URI }
+    username: { DB_USERNAME }
+    password: { DB_PASSWORD }
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update

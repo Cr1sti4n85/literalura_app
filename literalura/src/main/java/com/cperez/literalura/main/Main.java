@@ -27,7 +27,8 @@ public class Main {
                     2 - Listar libros registrados
                     3 - Listar autores registrados
                     4 - Listar autores vivos en un determinado año
-                    5 - Listar libros por idioma
+                    5 - Listar total de libros por idioma
+                    6 - Listar libros por idioma
                    
                     0 - Salir
                     """;
@@ -44,7 +45,9 @@ public class Main {
 
                 case 4 -> listarAutoresVivos();
 
-                case 5 -> buscarPorIdioma();
+                case 5 -> listarCantidadPorIdioma();
+
+                case 6 -> buscarPorIdioma();
 
                 case 0 -> cerrarAplicacion();
 
@@ -53,7 +56,6 @@ public class Main {
         }
 
     }
-
 
     private void buscarLibros() {
         bookService.buscarLibro(teclado);
@@ -68,6 +70,10 @@ public class Main {
 
     private void listarAutoresVivos() {
         bookService.listarAutoresVivos(teclado);
+    }
+
+    private void listarCantidadPorIdioma() {
+        bookService.mostrarCantidadLibrosPorIdioma();
     }
 
     private void buscarPorIdioma() {

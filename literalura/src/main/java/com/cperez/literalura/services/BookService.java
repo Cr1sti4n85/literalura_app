@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class BookService {
     private final ConvierteDatos conversor = new ConvierteDatos();
 
     public void buscarLibro(Scanner cli){
-        System.out.print("Escribe el nombre de la serie que deseas buscar: ");
+        System.out.print("Escribe el nombre o palabra del libro que deseas buscar: ");
         var bookName = cli.nextLine();
         var foundBooks = bookRepository.findByTitleContainsIgnoreCase(bookName);
 
@@ -70,6 +71,21 @@ public class BookService {
             return;
         }
         books.forEach(System.out::println);
+
+    }
+
+    public void mostrarCantidadLibrosPorIdioma(){
+        var books = bookRepository.findAll();
+        if(books.isEmpty()){
+            System.out.println("No hay libros para listar");
+            return;
+        }
+        Map<String, Long> booksByLanguage = books.stream()
+                .collect(Collectors.groupingBy(Book::getLanguage, Collectors.counting()));
+
+        System.out.println("############################");
+        booksByLanguage.forEach((lang, count) ->
+                System.out.println("Idioma: " + lang + " -> " + count + " libros \n"));
     }
 
     private void buscarOnline(String bookName){
