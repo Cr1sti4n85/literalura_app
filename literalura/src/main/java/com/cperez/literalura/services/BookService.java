@@ -109,25 +109,42 @@ public class BookService {
 
         Set<String> seenAuthorNames = new HashSet<>();
         var authorsList = bookList.stream()
-                .flatMap(result -> result.author().stream()
-                        .filter(authorDto -> seenAuthorNames.add(authorDto.name()))
-                        .map(Author::new))
+                .map(b -> b.author().getFirst())
+                .filter(author -> seenAuthorNames.add(author.name()))
+                .map(Author::new)
                 .toList();
 
         for (Author author : authorsList) {
             String authorName = author.getName();
 
-            bookList.stream()
-                    .filter(bookDto -> !bookDto.author().isEmpty())
-                    .filter(bookDto -> bookDto.author().getFirst().name().equals(authorName))
-                    .forEach(bookDto -> {
-                        var book = new Book(bookDto);
-                        author.addBook(book);
-                        System.out.println(book);
-                    });
+            var foundAuthor = authorRepository.findByName(authorName);
+            if (foundAuthor.isPresent()){
+                var bdAuthor = foundAuthor.get();
+                bookList.stream()
+                        .filter(bookDto -> !bookDto.author().isEmpty())
+                        .filter(bookDto -> bookDto.author().getFirst().name().equals(authorName))
+                        .forEach(bookDto -> {
+                            var book = new Book(bookDto);
+                            book.setAuthor(bdAuthor);
+                            bookRepository.save(book);
+                            System.out.println(book);
+                        });
+            } else {
+                bookList.stream()
+                        .filter(bookDto -> !bookDto.author().isEmpty())
+                        .filter(bookDto -> bookDto.author().getFirst().name().equals(authorName))
+                        .forEach(bookDto -> {
+                            var book = new Book(bookDto);
+                            author.addBook(book);
+                            System.out.println(book);
+                        });
+            }
+
+
 
         }
         authorsList.stream().filter(a -> !a.getBooks().isEmpty())
                 .forEach(authorRepository::save);
+
     }
 }
