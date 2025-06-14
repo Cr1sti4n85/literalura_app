@@ -3,6 +3,8 @@ package com.cperez.literalura.main;
 import com.cperez.literalura.services.BookService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.InputMismatchException;
@@ -76,7 +78,23 @@ public class Main {
     }
 
     private void listarLibros() {
-       bookService.listarTodosLosLibros();
+        var pageNum = 0;
+        var opt = 0;
+        PageRequest pageRequest;
+
+        while(opt != 2){
+            //PAGINACION
+            pageRequest = PageRequest.of(pageNum, 15);
+            bookService.listarTodosLosLibros(pageRequest);
+            System.out.print("""
+                    Elige una opción:
+                    1 - Obtener más resultados
+                    2 - Volver al menú principal
+                    """);
+            opt = Integer.parseInt(teclado.nextLine());
+            if (opt == 1) pageNum++;
+        }
+
     }
     private void listarAutores() {
         bookService.listarTodosLosAutores();

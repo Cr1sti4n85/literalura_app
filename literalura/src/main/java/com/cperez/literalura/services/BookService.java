@@ -6,6 +6,8 @@ import com.cperez.literalura.entities.Book;
 import com.cperez.literalura.repositories.AuthorRepository;
 import com.cperez.literalura.repositories.BookRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -33,8 +35,10 @@ public class BookService {
 
     }
 
-    public void listarTodosLosLibros(){
-        var books = bookRepository.findAll();
+    public void listarTodosLosLibros(PageRequest pageRequest){
+        Page<Book> page = bookRepository.findAll(pageRequest);
+//        var books = bookRepository.findAll();
+        var books = page.getContent();
         if(books.isEmpty()){
             System.out.println("No hay libros para listar");
             return;
